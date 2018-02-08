@@ -110,7 +110,49 @@ class Poker (object):
     # determine the each type of hand and print
     points_hand = []  # create list to store points for each hand
 
+    for i in range (len(self.players)):
+      if is_royal(self.players[i]) != 0:
+        points_hand[i] = is_royal(self.players[i])
+        print("Player", str(i + 1)+ ": Royal Flush")
+      elif is_straight_flush(self.players[i]) != 0:
+        points_hand[i] = is_straight_flush(self.players[i])
+        print("Player", str(i + 1)+ ": Straight Flush")
+      elif is_four_kind(self.players[i]) != 0:
+        points_hand[i] = is_four_kind[self.players[i]]
+        print("Player", str(i + 1)+ ": Four of a Kind")
+      elif is_full_house(self.players[i]) != 0:
+        points_hand[i] = is_full_house(self.players[i])
+        print("Player", str(i + 1)+ ": Full House")
+      elif is_flush(self.players[i]) != 0:
+        points_hand[i] = is_flush(self.players[i])
+        print("Player", str(i + 1)+ ": Flush")
+      elif is_straight(self.players[i]) != 0:
+        points_hand[i] = is_straight(self.players[i])
+        print("Player", str(i + 1)+ ": Straight")
+      elif is_three_kind(self.players[i]) != 0:
+        points_hand[i] = is_three_kind(self.players[i])
+        print("Player", str(i + 1)+ ": Three of a Kind")
+      elif is_two_pair(self.players[i]) != 0:
+        points_hand[i] = is_two_pair(self.players[i])
+        print("Player", str(i + 1)+ ": Two Pair")
+      else:
+        points_hand[i] = is_high_card(self.players[i])
+        print("Player", str(i + 1)+ ": High Card")
     # determine winner and print
+    max_ind = []
+    max_val = points_hand[i]
+    for i in len(points_hand):
+      if points_hand[i] >= max_val:
+        max_val = points_hand[i]
+    for i in len(points_hand):
+      if points_hand[i] == max_val:
+        max_ind.append(i)
+    if len(max_ind) == 1:
+      print("Player", str(max_ind[0]), "wins.")
+    else:
+      for i in len(max_ind):
+        print("Player", str(max_ind[i], "ties."))
+
 
   # determine if a hand is a royal flush
   def is_royal (self, hand):
@@ -187,8 +229,6 @@ class Poker (object):
   '''
   def is_high_card (self, hand):
     ...
-
- 
 
 def main():
   # prompt user to enter the number of players
