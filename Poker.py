@@ -109,49 +109,71 @@ class Poker (object):
 
     # determine the each type of hand and print
     points_hand = []  # create list to store points for each hand
-
+    h_hand = [] # create list to store h value for each hand
     for i in range (len(self.players)):
       if self.is_royal(self.players[i]) != 0:
         points_hand.append(self.is_royal(self.players[i]))
+        h_hand.append(10)
         print("Player", str(i + 1)+ ": Royal Flush")
       elif self.is_straight_flush(self.players[i]) != 0:
         points_hand.append(self.is_straight_flush(self.players[i]))
+        h_hand.append(9)
         print("Player", str(i + 1)+ ": Straight Flush")
       elif self.is_four_kind(self.players[i]) != 0:
         points_hand.append(self.is_four_kind(self.players[i]))
+        h_hand.append(8)
         print("Player", str(i + 1)+ ": Four of a Kind")
       elif self.is_full_house(self.players[i]) != 0:
         points_hand.append(self.is_full_house(self.players[i]))
         print("Player", str(i + 1)+ ": Full House")
+        h_hand.append(7)
       elif self.is_flush(self.players[i]) != 0:
         points_hand.append(self.is_flush(self.players[i]))
         print("Player", str(i + 1)+ ": Flush")
+        h_hand.append(6)
       elif self.is_straight(self.players[i]) != 0:
         points_hand.append(self.is_straight(self.players[i]))
         print("Player", str(i + 1)+ ": Straight")
+        h_hand.append(5)
       elif self.is_three_kind(self.players[i]) != 0:
         points_hand.append(self.is_three_kind(self.players[i]))
         print("Player", str(i + 1)+ ": Three of a Kind")
+        h_hand.append(4)
       elif self.is_two_pair(self.players[i]) != 0:
         points_hand.append(self.is_two_pair(self.players[i]))
         print("Player", str(i + 1)+ ": Two Pair")
+        h_hand.append(3)
       elif self.is_one_pair(self.players[i]) != 0:
         points_hand.append(self.is_one_pair(self.players[i]))
+        h_hand.append(2)
         print("Player", str(i + 1)+ ": One Pair")
       else:
         points_hand.append(self.is_high_card(self.players[i]))
+        h_hand.append(1)
         print("Player", str(i + 1)+ ": High Card")
     # determine winner and print
-    max_players = [] # list of players with max total points value
-    max_val = max(points_hand)
+    max_players = [] # list of players with max h value
+    max_val = max(h_hand)
     for i in range (len(points_hand)):
-      if points_hand[i] == max_val:
-        max_players.append(i+1)
+      if h_hand[i] == max_val:
+        max_players.append(i)
+      else:
+        continue
+    j = 0
     if len(max_players) == 1:
-      print("Player", str(max_players[0]), "wins.")
+          print("Player", str(max_players[0]+1), "wins.")
     else:
-      for i in len(max_players):
-        print("Player", str(max_players[i], "ties."))
+      while j < len(max_players):
+        if points_hand[max_players[j]] == max(points_hand):
+          print("Player", str(max_players[j] + 1) + " ties.")
+          points_hand[max_players[j]] = 0
+          j = 0
+        elif len(max_players) == 1:
+          print("Player", str(max_players[j]+1) + " ties.")
+          return
+        else:
+          j += 1
+    return
 
 
   # determine if a hand is a royal flush
