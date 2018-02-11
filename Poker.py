@@ -2,21 +2,21 @@
 
 #  Description:
 
-#  Student's Name:
+#  Student's Name: Audrey McNay
 
-#  Student's UT EID:
+#  Student's UT EID: alm5735
 
-#  Partner's Name:
+#  Partner's Name: Juan Zambrano
 
-#  Partner's UT EID:
+#  Partner's UT EID: jez346
 
 #  Course Name: CS 313E 
 
-#  Unique Number: 
+#  Unique Number: 51335
 
-#  Date Created:
+#  Date Created: 2/4/18
 
-#  Date Last Modified:
+#  Date Last Modified: 2/10/18
 
 import random
 
@@ -111,37 +111,40 @@ class Poker (object):
     points_hand = []  # create list to store points for each hand
 
     for i in range (len(self.players)):
-      if is_royal(self.players[i]) != 0:
-        points_hand.append(is_royal(self.players[i]))
+      if self.is_royal(self.players[i]) != 0:
+        points_hand.append(self.is_royal(self.players[i]))
         print("Player", str(i + 1)+ ": Royal Flush")
-      elif is_straight_flush(self.players[i]) != 0:
-        points_hand.append(is_straight_flush(self.players[i]))
+      elif self.is_straight_flush(self.players[i]) != 0:
+        points_hand.append(self.is_straight_flush(self.players[i]))
         print("Player", str(i + 1)+ ": Straight Flush")
-      elif is_four_kind(self.players[i]) != 0:
-        points_hand.append(is_four_kind(self.players[i]))
+      elif self.is_four_kind(self.players[i]) != 0:
+        points_hand.append(self.is_four_kind(self.players[i]))
         print("Player", str(i + 1)+ ": Four of a Kind")
-      elif is_full_house(self.players[i]) != 0:
-        points_hand.append(is_full_house(self.players[i]))
+      elif self.is_full_house(self.players[i]) != 0:
+        points_hand.append(self.is_full_house(self.players[i]))
         print("Player", str(i + 1)+ ": Full House")
-      elif is_flush(self.players[i]) != 0:
-        points_hand.append(is_flush(self.players[i]))
+      elif self.is_flush(self.players[i]) != 0:
+        points_hand.append(self.is_flush(self.players[i]))
         print("Player", str(i + 1)+ ": Flush")
-      elif is_straight(self.players[i]) != 0:
-        points_hand.append(is_straight(self.players[i]))
+      elif self.is_straight(self.players[i]) != 0:
+        points_hand.append(self.is_straight(self.players[i]))
         print("Player", str(i + 1)+ ": Straight")
-      elif is_three_kind(self.players[i]) != 0:
-        points_hand.append(is_three_kind(self.players[i]))
+      elif self.is_three_kind(self.players[i]) != 0:
+        points_hand.append(self.is_three_kind(self.players[i]))
         print("Player", str(i + 1)+ ": Three of a Kind")
-      elif is_two_pair(self.players[i]) != 0:
-        points_hand.append(is_two_pair(self.players[i]))
+      elif self.is_two_pair(self.players[i]) != 0:
+        points_hand.append(self.is_two_pair(self.players[i]))
         print("Player", str(i + 1)+ ": Two Pair")
+      elif self.is_one_pair(self.players[i]) != 0:
+        points_hand.append(self.is_one_pair(self.players[i]))
+        print("Player", str(i + 1)+ ": One Pair")
       else:
-        points_hand.append(is_high_card(self.players[i]))
+        points_hand.append(self.is_high_card(self.players[i]))
         print("Player", str(i + 1)+ ": High Card")
     # determine winner and print
     max_players = [] # list of players with max total points value
     max_val = max(points_hand)
-    for i in range len(points_hand):
+    for i in range (len(points_hand)):
       if points_hand[i] == max_val:
         max_players.append(i+1)
     if len(max_players) == 1:
@@ -163,8 +166,11 @@ class Poker (object):
     rank_order = True
     for i in range (len(hand)):
       rank_order = rank_order and (hand[i].rank == 14 - i)
-    
-    return (same_suit and rank_order)
+
+    if rank_order:
+      return 10 * 13**5 + hand[0].rank * 13**4 + hand[1].rank * 13**3 + hand[2].rank * 13**2 + hand[3].rank * 13 + hand[4].rank
+    else:
+      return 0
 
  
   def is_straight_flush (self, hand):
@@ -179,26 +185,42 @@ class Poker (object):
     for i in range (len(hand)):
       rank_order = rank_order and ((hand[i].rank + 1) == hand[i + 1].rank)
     
-    return (same_suit and rank_order)
+    if rank_order:
+      return 9 * 13**5 + hand[0].rank * 13**4 + hand[1].rank * 13**3 + hand[2].rank * 13**2 + hand[3].rank * 13 + hand[4].rank
+    else:
+      return 0
 
   def is_four_kind (self, hand):
-    rank_check = hand[0].rank
-    for card in hand:
-      if card.rank != rank_check:
-        return False
-    return True
+    count = 0
+    for card in range(len(hand) - 1):
+        if(hand[card].rank == hand[card+1].rank):
+            count +=1
+            same_card = hand[card].rank
+        else:
+            different_card = hand[card].rank
+    if(count == 4):
+        return 8 * 13**5 + hand[0].rank * 13**4 + hand[1].rank * 13**3 + hand[2].rank * 13**2 + hand[3].rank * 13 + hand[4].rank
+    else:
+        return 0
 
   def is_full_house (self, hand):
-    similar_cards_left = 1 #how many cards have similar rank from left
-    similar_cards_right = 1 #how many cards have similar rank from the right
+    similar_cards_left = 0 #how many cards have similar rank from left
+    similar_cards_right = 0 #how many cards have similar rank from the right
     leng = len(hand)
-    for i in leng:
+    for i in range (leng-1):
       if hand[0].rank == hand[i].rank:
       	similar_cards_left += 1
-      if hand[leng-1].rank == hand[leng-i].rank:
+      else:
+        continue
+      if hand[leng-1].rank == hand[leng-i-1].rank:
         similar_cards_right += 1
+      else:
+        continue
 
-    return (if similar_cards_left + similar_cards_right == 5)
+    if (similar_cards_left + similar_cards_right == 5):
+      return 7 * 13**5 + hand[0].rank * 13**4 + hand[1].rank * 13**3 + hand[2].rank * 13**2 + hand[3].rank * 13 + hand[4].rank
+    else: 
+      return 0
 
   def is_flush (self, hand):
     for i in range (len(hand) - 1):
@@ -207,25 +229,49 @@ class Poker (object):
     return True
 
   def is_straight (self, hand):
-    ...
+    rank_order = True
+    for i in range (len(hand) - 1):
+      rank_order = rank_order and (hand[i].rank + 1 == hand[i+1].rank)
+    if rank_order:
+        return 5 * 13**5 + hand[0].rank * 13**4 + hand[1].rank * 13**3 + hand[2].rank * 13**2 + hand[3].rank * 13 + hand[4].rank
+    else:
+        return 0
 
   def is_three_kind (self, hand):
-    ...
+    for i in range(len(hand) - 1):
+      if hand[i].rank == hand[i+1].rank:
+        if (i+2 < len(hand) - 1) and (hand[i+1].rank == hand[i+2].rank):
+          return 3 * 13**5 + hand[0].rank * 13**4 + hand[1].rank * 13**3 + hand[2].rank * 13**2 + hand[3].rank * 13 + hand[4].rank
+      else:
+        continue
+    return 0
 
   def is_two_pair (self, hand):
-    ...
-
-  '''
-  # determine if a hand is one pair
+    amount_ranks = []
+    for i in range(len(hand)):
+      if hand[i].rank not in amount_ranks:
+        amount_ranks.append(hand[i].rank)
+      else:
+        continue
+    if len(amount_ranks) != 3:
+      return 0
+    else:
+      return 3 * 13**5 + hand[0].rank * 13**4 + hand[1].rank * 13**3 + hand[2].rank * 13**2 + hand[3].rank * 13 + hand[4].rank
+ 
   def is_one_pair (self, hand):
-    for i in range (len(hand) - 1):
-      if (hand[i].rank == hand[i + 1].rank):
-        return True
-    return False
-
-  '''
+    amount_ranks = []
+    for i in range(len(hand)):
+      if hand[i].rank not in amount_ranks:
+        amount_ranks.append(hand[i].rank)
+      else:
+        continue
+    if len(amount_ranks) != 4:
+      return 0
+    else:
+      return 2 * 13**5 + hand[0].rank * 13**4 + hand[1].rank * 13**3 + hand[2].rank * 13**2 + hand[3].rank * 13 + hand[4].rank
+ 
   def is_high_card (self, hand):
-    ...
+    return 13**5 + hand[0].rank * 13**4 + hand[1].rank * 13**3 + hand[2].rank * 13**2 + hand[3].rank * 13 + hand[4].rank
 
 def main():
   # prompt user to enter the number of players
@@ -240,46 +286,5 @@ def main():
   game.play()
 
 main()
-
-'''
-
-#Royal Flush
-suit_check = hand[0].suit
-total_rank = 14 + 13 + 12 + 11 + 10 #when suit is same, rank_check = total_rank only if royal flush
-rank_check = 0
-for card in hand:
-  if card.suit != suit_check:
-    return False
-  rank_check += card.rank
-if rank_check != total_rank:
-  return False
-return True
-
-#Straight Flush
-
-
-#Four of a Kind
-rank_check = hand[0].rank
-for card in hand:
-  if card.rank != rank_check:
-    return False
-return True
-
-#Full House (this code is janky)
-similar_cards = 0 #how many cards have similar rank
-rank_check = hand[0].rank
-for card in hand:
-  if rank_check == card.rank:
-    similar_cards += 1
-return if similar_cards == 3 or similar_cards == 2
-
-#Flush
-suit_check = hand[0].suit
-for card in hand:
-  if suit_check != card.suit:
-    return False
-return True
-
-#Straight
 
 
