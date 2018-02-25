@@ -171,6 +171,7 @@ class Blackjack (object):
     # Each player hits until he says no
     playerPoints = []
     for i in range (self.numPlayers):
+      print()
       while True:
         choice = input ('Player ' + str(i + 1) + ': do you want to hit? [y / n]: ')
         if choice in ('y', 'Y'):
@@ -186,7 +187,9 @@ class Blackjack (object):
     # Dealer's turn to hit
     self.dealer.hit (self.deck)
     dealerPoints = self.dealer.getPoints()
+    print()
     print ('Dealer: ' + str(self.dealer) + ' - ' + str(dealerPoints))
+    print()
 
     # determine the outcome; you will have to re-write the code
     # it was written for just one player having playerPoints
@@ -199,7 +202,7 @@ class Blackjack (object):
       elif (playerPoints[i] > 21):
         print ('Player ' + str(i + 1) + ' loses')
       elif (dealerPoints > 21) and (playerPoints[i] <= 21):
-        print('Player ' + str(i + 1) + 'wins')
+        print('Player ' + str(i + 1) + ' wins')
       elif( dealerPoints == playerPoints[i]):
         if self.Players[i].hasBlackjack() and not self.dealer.hasBlackjack():
           print('Player ' + str(i + 1) + ' wins')
